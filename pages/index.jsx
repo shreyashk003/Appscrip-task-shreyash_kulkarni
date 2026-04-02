@@ -6,6 +6,7 @@ import HeroBanner from "../components/HeroBanner";
 import { getProducts } from "../lib/api";
 import { useState, useEffect, useMemo } from "react";
 import useDebounce from "../hooks/useDebounce";
+import Head from "next/head";
 
 export default function Home({ products }) {
   const [search, setSearch] = useState("");
@@ -53,6 +54,11 @@ export default function Home({ products }) {
 
   return (
     <>
+      <Head>
+        <title>Appscrip Store | Premium Electronic Gadgets & Clothing</title>
+        <meta name="description" content="Shop premium electronics, men's and women's clothing, and jewelry with Appscrip Store. Discover top-rated products with our advanced filtering system." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <div className="container">
         <Header />
         <HeroBanner />

@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
 import Link from "next/link";
+import Head from "next/head";
 
 export default function CartPage() {
   const { cartItems, removeFromCart, clearCart } = useCart();
@@ -10,6 +11,11 @@ export default function CartPage() {
 
   return (
     <>
+      <Head>
+        <title>Your Cart | Appscrip Store</title>
+        <meta name="description" content="Review your shopping cart at Appscrip Store." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <div className="container">
         <Header />
         
