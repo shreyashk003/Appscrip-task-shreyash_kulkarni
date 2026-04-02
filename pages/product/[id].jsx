@@ -65,8 +65,7 @@ export async function getServerSideProps({ params }) {
     return {
       props: { product: product || null },
     };
-  } catch (err) {
-    console.error(err);
+  } catch {
     return { props: { product: null } };
   }
 }

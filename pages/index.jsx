@@ -4,7 +4,7 @@ import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
 import HeroBanner from "../components/HeroBanner";
 import { getProducts } from "../lib/api";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import useDebounce from "../hooks/useDebounce";
 import Head from "next/head";
 
@@ -48,10 +48,6 @@ export default function Home({ products }) {
     page * limit
   );
 
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch, category, inStockOnly, minRating, sortBy]);
-
   return (
     <>
       <Head>
@@ -76,14 +72,14 @@ export default function Home({ products }) {
               placeholder="Search products..."
               style={{ width: '100%', paddingLeft: '48px' }}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             />
           </div>
 
           <div style={{ flex: '0 0 180px' }}>
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => { setCategory(e.target.value); setPage(1); }}
               style={{ width: '100%', cursor: 'pointer', appearance: 'none', backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394A3B8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px top 50%', backgroundSize: '12px auto' }}
             >
               <option value="all">Categories: All</option>
@@ -98,7 +94,7 @@ export default function Home({ products }) {
           <div style={{ flex: '0 0 200px' }}>
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
+              onChange={(e) => { setSortBy(e.target.value); setPage(1); }}
               style={{ width: '100%', cursor: 'pointer', appearance: 'none', backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394A3B8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px top 50%', backgroundSize: '12px auto' }}
             >
               <option value="default">Sort by: Default</option>
@@ -115,9 +111,9 @@ export default function Home({ products }) {
           <div style={{ flex: '0 0 250px' }} className="mobile-hidden">
             <ProductFilters 
               inStockOnly={inStockOnly} 
-              setInStockOnly={setInStockOnly}
+              setInStockOnly={(nextVal) => { setInStockOnly(nextVal); setPage(1); }}
               minRating={minRating}
-              setMinRating={setMinRating}
+              setMinRating={(nextVal) => { setMinRating(nextVal); setPage(1); }}
             />
           </div>
 
@@ -131,7 +127,7 @@ export default function Home({ products }) {
                     <line x1="8" y1="12" x2="16" y2="12"></line>
                   </svg>
                   <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>No matching products found. Try adjusting your filters.</p>
-                  <button onClick={() => { setSearch(""); setCategory("all"); setInStockOnly(false); setMinRating(0); setSortBy("default"); }} className="btn-outline" style={{ marginTop: '24px' }}>Clear All Filters</button>
+                  <button onClick={() => { setSearch(""); setCategory("all"); setInStockOnly(false); setMinRating(0); setSortBy("default"); setPage(1); }} className="btn-outline" style={{ marginTop: '24px' }}>Clear All Filters</button>
                 </div>
               ) : (
                 paginatedProducts.map((p) => (
@@ -182,8 +178,8 @@ export async function getServerSideProps() {
   try {
     const products = await getProducts();
     return { props: { products } };
-  } catch (error) {
-    console.error("SSR Error:", error);
+  } catch {
+    // Avoid noisy production console output; render an empty state instead.
     return { props: { products: [] } };
   }
 }

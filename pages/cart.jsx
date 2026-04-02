@@ -30,7 +30,9 @@ export default function CartPage() {
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
               </svg>
               <h2 style={{ fontSize: '1.5rem', marginBottom: '16px', color: 'var(--text-primary)' }}>Your cart is empty</h2>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>Looks like you haven't added anything yet.</p>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
+                Looks like you haven&apos;t added anything yet.
+              </p>
               <Link href="/" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="19" y1="12" x2="5" y2="12"></line>

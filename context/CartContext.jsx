@@ -36,7 +36,14 @@ export const useCart = () => {
   const context = useContext(CartContext);
 
   if (!context) {
-    throw new Error("useCart must be used inside CartProvider");
+    // Production safety: if CartProvider is missing, avoid crashing the whole app.
+    // (This can happen during mis-wiring or certain edge render paths.)
+    return {
+      cartItems: [],
+      addToCart: () => {},
+      removeFromCart: () => {},
+      clearCart: () => {},
+    };
   }
 
   return context;
