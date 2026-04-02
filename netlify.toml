@@ -1,7 +1,5 @@
 [build]
   command = "npm run build"
   publish = ".next"
-
-[build.environment]
-  NODE_ENV = "production"
+  # Omit NODE_ENV=production here so npm installs devDependencies needed for `next build`.
 
